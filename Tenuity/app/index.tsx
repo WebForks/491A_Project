@@ -4,6 +4,25 @@ import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import "../global.css";
 
+// Imports needed to connect to database
+import {database, ref, set} from '../firebaseConfig';
+
+// Simple test function to write into the database
+const testWrite = async() => {
+	try {
+		// Adding dummy data to database
+		await set(ref(database, 'Landlords/' + 'test_user'), {
+			name: 'test_user',
+			email: 'dudeinlongbeach@gmail.com',
+			phone: '123456789'
+		});
+		console.log("Successfully wrote to the database");
+	} catch(err){
+		console.log("Error writing data:", err);
+	}
+}
+
+
 export default function App() {
   const [isLandlord, setIsLandlord] = useState(true);
 
@@ -36,7 +55,10 @@ export default function App() {
 
         {/* Sign In Button */}
         <Link href="/dashboard" asChild>
-          <TouchableOpacity className="bg-blue-500 w-full py-3 rounded items-center mb-4">
+          <TouchableOpacity 
+            className="bg-blue-500 w-full py-3 rounded items-center mb-4"
+            onPress={testWrite}
+          >
             <Text className="text-white font-bold">Sign In</Text>
           </TouchableOpacity>
         </Link>
